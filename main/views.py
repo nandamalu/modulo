@@ -1,9 +1,35 @@
-from django.shortcuts import render
 from .models import Aluno
 from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 
 def alunoView(request):
     alunos_list = Aluno.objects.all()
-    alunos_str = '\n',join([str(aluno)for aluno in alunos_list])
-    return HttpResponse(alunos_str)
+    return render(request, 'main/alunos.html', {'alunos_list': alunos_list})
 # Create your views here.
+
+
+def alunoIDview(request, id):
+    aluno = get_object_or_404(Aluno, pk=id)
+    print(aluno)
+    return render(request, 'main/alunoID.html', {'aluno':aluno})
+
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView
+from.forms import AlunoForm
+
+class AlunoCreateView(CreateView):
+    model = Aluno
+    form_class = AlunoForm
+    success_url = reverse_lazy('aluno-list')
+    templast_name = 'main/aluno_form.html'
+
+    def form_valid(self,form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+class AlunoUpdateView(UpdateView):
+    model = Aluno
+    form_class = AlunoForm
+    template_name = 'main/aluno_form,html'
+    success_url = reverser_lazy('aluno-list')
+    

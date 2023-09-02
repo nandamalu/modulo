@@ -30,6 +30,6 @@ class AlunoCreateView(CreateView):
 class AlunoUpdateView(UpdateView):
     model = Aluno
     form_class = AlunoForm
-    template_name = 'main/aluno_form,html'
-    success_url = reverser_lazy('aluno-list')
+    template_name = 'main/aluno_form.html'
+    success_url = reverse_lazy('aluno-list')
     
